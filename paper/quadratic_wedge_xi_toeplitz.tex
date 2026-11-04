@@ -1,0 +1,720 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[final]{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[a4paper,top=28mm,bottom=30mm,left=30mm,right=30mm,headheight=14pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[font=small,labelfont=bf,margin=8mm]{caption}
+\usepackage[pdftitle={A uniform quadratic wedge for consecutive Toeplitz minors of the Riemann xi-coefficients},pdfauthor={Alessio Doria - Independent Researcher},colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+
+\linespread{1.08}
+\setlength{\parskip}{0.35em}
+\setlist{itemsep=0.25em,topsep=0.4em}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.6em}{0.7em}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.4em}
+\numberwithin{equation}{section}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape A. Doria}
+\fancyhead[R]{\small\itshape A uniform quadratic wedge for Toeplitz minors of $\xi$}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem*{mainthm}{Main Theorem}
+\newtheorem*{inputA}{Input A (Michałowski, Gate A)}
+\newtheorem*{inputB}{Input B (Liu--Mao, Lemma 3.3)}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\qq}{\mathfrak q}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\qbin}[3]{\genfrac{[}{]}{0pt}{}{#1}{#2}_{#3}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\DeclareMathOperator{\diag}{diag}
+
+\begin{document}
+
+\thispagestyle{plain}
+\begin{center}
+{\LARGE\bfseries A uniform quadratic wedge for consecutive\\[0.35em] Toeplitz minors of the Riemann $\boldsymbol{\xi}$-coefficients\par}
+\vspace{1.4em}
+{\large Alessio Doria -- Independent Researcher\par}
+\vspace{0.3em}
+{\normalsize\href{mailto:numero2405@gmail.com}{\texttt{numero2405@gmail.com}}\par}
+\vspace{0.6em}
+{\normalsize November 2026\par}
+\end{center}
+\vspace{1.2em}
+
+\begin{quote}\small
+\noindent\textbf{Abstract.} Let $\tfrac18\xi(\tfrac12+\tfrac{ix}{2})=\sum_{k\ge0}(-1)^ka_kx^{2k}$, so that $a_k>0$, and let
+$D_{r,k}=\det[a_{k+j-i}]_{i,j=0}^{r-1}$ be the consecutive Toeplitz minors of the coefficient sequence.
+The Riemann Hypothesis implies that $(a_k)$ is a P\'olya frequency sequence, hence $D_{r,k}\ge0$ for all $r,k$.
+Michałowski recently proved unconditionally that $D_{r,k}>0$ whenever $r\ge2$ and $k\ge10^{18}r^3$.
+We prove that
+\[
+D_{r,k}>0\qquad\text{for all } r\ge2 \text{ and } k\ge 10^{11}r^2 .
+\]
+The improvement comes from replacing the three-point log-quadratic comparison sequence by a
+four-point $q$-Pochhammer comparison sequence $c_s=(1-\alpha)^s/(\alpha;\qq)_s$ that reproduces the
+normalized coefficients at four consecutive indices exactly. The reversed Hankel block of this reference is diagonally
+congruent to a matrix with an exact $q$-Pascal $LDL^{T}$ factorization (a consequence of the
+$q$-Chu--Vandermonde summation) with alternating pivots, so the dilation/whitening argument applies
+to it unchanged, while the logarithmic mismatch now has four interpolation zeros. The weighted remainder
+therefore starts at fourth order and scales like $r^2/k$ instead of $(r^3/k)^{1/2}$.
+The only analytic inputs are Michałowski's all-degree Taylor bound for $\log a$ and the
+Liu--Mao asymptotic for the log-curvature of $(a_k)$; all remaining constants are
+certified in interval arithmetic.
+
+\medskip
+\noindent\textbf{Keywords.} Riemann $\xi$-function; Toeplitz minors; P\'olya frequency sequences; total positivity;
+$q$-Pochhammer symbol; $q$-Chu--Vandermonde; Sylvester inertia.
+
+\noindent\textbf{MSC 2020.} Primary 11M26; Secondary 15B05, 33D15, 30C15.
+\end{quote}
+\vspace{0.8em}
+
+
+\section{Introduction}
+
+\subsection{Setting}
+Let $\xi(s)=\tfrac12 s(s-1)\pi^{-s/2}\Gamma(s/2)\zeta(s)$ and write, following \cite{Mich},
+\begin{equation}\label{eq:Xi}
+\Xi(x)=\frac18\,\xi\Big(\frac12+\frac{ix}{2}\Big)=\sum_{k\ge0}(-1)^ka_kx^{2k},\qquad
+a_k=\frac{1}{(2k)!}\int_0^\infty u^{2k}\Phi(u)\,du>0,
+\end{equation}
+where $\Phi(u)=\sum_{n\ge1}(2\pi^2n^4e^{9u}-3\pi n^2e^{5u})\exp(-\pi n^2e^{4u})>0$.
+For $r\ge1$ and $k\ge0$ set
+\[
+D_{r,k}=\det\big[a_{k+j-i}\big]_{i,j=0}^{r-1}\qquad(a_\ell=0\text{ for }\ell<0).
+\]
+The function $G(z)=\sum_k a_kz^k$ is entire of order $1/2$ and $\Xi(x)=G(-x^2)$. The Riemann Hypothesis (RH)
+is equivalent to all zeros of $G$ being real and negative, and by the Aissen--Schoenberg--Whitney--Edrei theorem
+\cite{ASW,Edrei} this happens if and only if $(a_k)$ is a P\'olya frequency sequence, i.e.\ every minor of the
+Toeplitz matrix $[a_{j-i}]_{i,j\ge0}$ is nonnegative. The consecutive minors $D_{r,k}$ form a natural
+two-parameter subfamily; under RH they are all nonnegative.
+
+Unconditional information on $D_{r,k}$ is of two kinds. For each fixed $r$, $D_{r,k}>0$ for $k\ge N(r)$ with
+a non-explicit $N(r)$ (Katkova \cite{Katkova}); for $r=2$ this is the Turán inequality \cite{CNV}. Liu and Mao
+\cite{LM} recently proved that $(a_k)$ (equivalently the sequence $\lambda_n=\xi^{(2n)}(\tfrac12)/(2n)!$) is
+infinitely log-concave. Uniformly in $r$, Michałowski \cite{Mich} proved the explicit cubic wedge
+\begin{equation}\label{eq:cubic}
+D_{r,k}>0\qquad(r\ge2,\ k\ge10^{18}r^3).
+\end{equation}
+Related but different in nature are the hyperbolicity results for Jensen polynomials of $\xi$
+\cite{GORZ,Holland}, which concern a different two-parameter family of determinantal conditions.
+
+\subsection{Result}
+\begin{mainthm}
+For every integer $r\ge2$ and every integer $k\ge10^{11}r^2$ one has $D_{r,k}>0$.
+\end{mainthm}
+
+The constant $10^{11}$ is not optimized; the argument closes for every $C>1.35\cdot10^{10}$
+(Remark~\ref{rem:constant}). The theorem says nothing about the RH-critical regime $k=O(r)$.
+
+\subsection{Strategy}
+We follow the architecture of \cite{Mich}: compare the reversed Hankel block
+$H=[a_{k+d-i-j}]_{i,j=0}^{d}$, $d=r-1$, with an explicit reference block $M=SJS^T$ of known
+inertia, and show that the \emph{whitened} perturbation $S^{-1}(H'-M)S^{-T}$ has spectral norm $<1$, where
+$H'$ is a diagonal rescaling of $H$; Sylvester's law then fixes the sign of $\det H$.
+The new ingredient is the reference. In \cite{Mich} the reference is $c_s=q_k^{s(s-1)/2}$, which matches
+$\log a_{k+s}$ at the three points $s=-1,0,1$, so the logarithmic error $h$ has a cubic Taylor term of size
+$k^{-2}$. Here we use the $q$-Pochhammer sequence
+\[
+c_s=\frac{(1-\alpha)^s}{(\alpha;\qq)_s},
+\]
+whose two parameters are chosen so that $c$ matches the normalized coefficients at $s=-1,0,1,2$. Two facts make
+this work:
+\begin{enumerate}
+\item the reversed Hankel block of $c$ is diagonally congruent to the matrix
+\[U_{ij}=\frac{(B;Q)_{i+j}}{(B;Q)_i\,(B;Q)_j},\]
+which has an exact $LDL^T$ factorization with the \emph{same} $q$-Pascal factor $L=[\qbin ij{Q}]$ as the
+$q$-Vandermonde matrix and with pivots of alternating sign (Proposition~\ref{prop:LDL});
+\item the response of the whitened block to a diagonal dilation depends only on $L$ and on the pivot ratios, and the
+new pivot ratios give a whitened sub-diagonal that is no larger than before (Lemma~\ref{lem:subdiag}).
+\end{enumerate}
+Since the error $h$ now vanishes at four nodes, it equals $\sum_{n\ge4}\beta_n(s^n-\cI_3[s^n])$
+with $|\beta_n|\lesssim 40^nk^{1-n}$, and the relevant weight is $w\asymp\sqrt{rk}$; the leading term is
+$k^{-3}w^4\asymp r^2/k$.
+
+\subsection{Inputs and logical dependencies}
+We use exactly two analytic results from the literature, stated in Section~\ref{sec:inputs}:
+the $k$-unit form of Michałowski's all-degree bound (\cite[Prop.~3.7, first display]{Mich}) and
+the Liu--Mao estimate \cite[Lemma~3.3]{LM}. We do \emph{not} use \cite[Lemma~2.1]{Mich} (the bounds
+$1/(2k)<\tau_k<4/k$) nor its $\tau$-unit form of Gate A: all information on $\tau_k$ comes from Input~B.
+The dilation estimates and the inertia lemma are re-proved here for the new reference.
+All scalar inequalities are certified with Arb \cite{Arb}; scripts are provided as ancillary files.
+
+\subsection*{Notation}
+$(a;q)_n=\prod_{j=0}^{n-1}(1-aq^j)$ for $n\ge0$, $(a;q)_{-m}=1/(aq^{-m};q)_m$ for $m>0$, and
+$\qbin nm{Q}=(Q;Q)_n/((Q;Q)_m(Q;Q)_{n-m})$. Throughout $r\ge2$, $d=r-1$, and $\|\cdot\|$ is the spectral norm.
+
+\section{Analytic inputs}\label{sec:inputs}
+
+Put $f=\log a$, where $a(z)=I(z)/\Gamma(2z+1)$ and $I(z)=\int_0^\infty u^{2z}\Phi(u)\,du$ is holomorphic on
+$\operatorname{Re}z>-\tfrac12$; thus $a(n)=a_n$ for integers $n\ge0$.
+
+\begin{inputA}[{\cite[Lemma~3.6, Prop.~3.7]{Mich}}]
+For every integer $k\ge10^9$, $f$ is holomorphic on $|z-k|\le0.05k$ (with $f(n)=\log a_n$ at integers), and
+\begin{equation}\label{eq:gateA}
+\Big|\frac{f^{(n)}(k)}{n!}\Big|\le 3\cdot40^n\,k^{1-n}\qquad(n\ge3).
+\end{equation}
+\end{inputA}
+
+Define the log-curvature
+\[
+q_k=\frac{a_{k-1}a_{k+1}}{a_k^2}=e^{-\tau_k},\qquad \tau_k>0 .
+\]
+Liu and Mao use $F(x)=\xi(\tfrac12+\sqrt x)=\sum\lambda_nx^n$. Since $\tfrac18\xi(\tfrac12+\tfrac{\sqrt z}{2})=\sum a_nz^n=\tfrac18F(z/4)$,
+we have $a_n=\lambda_n/(8\cdot4^n)$, and therefore $\lambda_{n-1}\lambda_{n+1}/\lambda_n^2=q_n$.
+Let $W$ be the principal branch of the Lambert function and
+\[
+\cT(z)=\frac{2\,W(2z/\pi)}{z\,(1+W(2z/\pi))}.
+\]
+
+\begin{inputB}[{\cite[Lemma~3.3, (3.53)]{LM}}]
+For real $n\ge12000$ there is a function $g_0$, holomorphic on $D_0=\{z:|z-n|\le n/2\}$ and real on
+$D_0\cap\mathbb R$, with $g_0(m)=\log(\lambda_m^2/\lambda_{m-1}\lambda_{m+1})=\tau_m$ for integers $m\in D_0$, and
+\[
+|g_0(z)-\cT(z)|\le\frac{20}{n^2}\qquad(z\in D_0).
+\]
+\end{inputB}
+
+\begin{remark}
+Input~A is used only through the Taylor coefficients of $f$ at an integer centre; any analytic interpolation of
+$\log a_n$ with these bounds would do, and it need not coincide with the interpolation $g_0$ of Input~B, since
+only the values at integers enter the comparison (Section~\ref{sec:remainder}).
+\end{remark}
+
+\section{Curvature windows}\label{sec:windows}
+
+\begin{lemma}\label{lem:tau}
+For every integer $k\ge12000$,
+\[
+1.71<\frac{12}{7}-\frac{20}{k}\le k\tau_k\le 2+\frac{20}{k}<2.002 .
+\]
+\end{lemma}
+
+\begin{proof}
+Write $w=W(2x/\pi)$. Since $6e^6<2\cdot12000/\pi$ and $W$ is increasing, $w>6$ for $x\ge12000$, so
+$x\cT(x)=2w/(1+w)\in[12/7,2)$. Apply Input~B with $n=k$ at $z=k$.
+\end{proof}
+
+\begin{lemma}\label{lem:Delta}
+For every integer $k\ge12000$, $\Delta_k:=\tau_k-\tau_{k+1}$ satisfies
+\[
+1.675<\frac{576}{343}\Big(\frac{k}{k+1}\Big)^2-\frac{40}{k-2}\le k^2\Delta_k\le 2+\frac{40}{k-2}<2.004 .
+\]
+In particular $q_k<q_{k+1}$.
+\end{lemma}
+
+\begin{proof}
+With $w=W(2x/\pi)$ and $w'(x)=w/(x(1+w))$ one computes
+\[
+-\cT'(x)=\frac{2}{x^2}\,g(w),\qquad g(w)=\frac{w^2(w+2)}{(1+w)^3}.
+\]
+Since $(\log g)'(w)=\frac2w+\frac1{w+2}-\frac3{w+1}=\frac{w+4}{w(w+1)(w+2)}>0$, $g$ increases from
+$g(6)=288/343$ to $1$; hence $\frac{576}{343}x^{-2}\le-\cT'(x)<2x^{-2}$ for $x\ge12000$, and
+$\cT(k)-\cT(k+1)\in[\frac{576}{343}(k+1)^{-2},\,2k^{-2}]$.
+Let $E=g_0-\cT$ with $n=k$ in Input~B. For $\eta\in[k,k+1]$ the disc $|z-\eta|\le k/2-1$ lies in $D_0$, so
+Cauchy's estimate gives $|E'(\eta)|\le(20/k^2)/(k/2-1)=40/(k^2(k-2))$, whence
+$|E(k)-E(k+1)|\le40/(k^2(k-2))$. Both bounds are monotone in $k$ in the favourable direction; the numerical
+values at $k=12000$ are certified in Appendix~\ref{app:cert}.
+\end{proof}
+
+\section{The four-point \texorpdfstring{$q$}{q}-Pochhammer reference}\label{sec:reference}
+
+Fix an integer $k\ge12000$ and normalize
+\[
+\rho=\frac{a_{k+1}}{a_k},\qquad b_s=\frac{a_{k+s}}{a_k\,\rho^s},
+\]
+so that $b_{-1}=q_k=:u$, $b_0=b_1=1$, $b_2=q_{k+1}=:v$, and $0<u<v<1$ by Lemmas~\ref{lem:tau}--\ref{lem:Delta}.
+
+\begin{definition}
+Let
+\[
+\qq=\frac{1-v}{v(1-u)},\qquad \alpha=\frac{(1-u)(1-v)}{v-u},\qquad \theta=\log\qq,\qquad
+c_s=\frac{(1-\alpha)^s}{(\alpha;\qq)_s}\quad(s\in\mathbb Z).
+\]
+\end{definition}
+
+\begin{lemma}\label{lem:match}
+$c_{-1}=u$, $c_0=c_1=1$, $c_2=v$. Moreover, with $\sigma=\tau_{k+1}$ and $\Delta=\tau_k-\sigma$,
+\[
+\alpha=\frac{2\sinh(\tau_k/2)\sinh(\sigma/2)}{\sinh(\Delta/2)},\qquad
+\theta=\frac{\tau_k+\sigma}{2}+\log\frac{\sinh(\sigma/2)}{\sinh(\tau_k/2)} .
+\]
+\end{lemma}
+
+\begin{proof}
+$c_0=1$, $c_1=1$, $c_2=(1-\alpha)/(1-\alpha\qq)$ and $c_{-1}=(1-\alpha\qq^{-1})/(1-\alpha)$. Substituting the
+definitions of $\alpha,\qq$ gives $c_2=v$ and $c_{-1}=u$ after clearing denominators (a polynomial identity in
+$u,v$). The hyperbolic forms follow from $1-e^{-x}=2e^{-x/2}\sinh(x/2)$.
+\end{proof}
+
+\begin{lemma}\label{lem:params}
+For $k\ge12000$: $1.45<\alpha<2.40$ and $0.53<k\theta<2.002$. In particular $\qq>1$.
+\end{lemma}
+
+\begin{proof}
+Using $x\le\sinh x\le xe^{x^2/6}$,
+$\alpha$ lies between $\frac{\tau_k\sigma}{\Delta}e^{-\Delta^2/24}$ and $\frac{\tau_k\sigma}{\Delta}e^{(\tau_k^2+\sigma^2)/24}$.
+For $\theta$: $(\tau_k+\sigma)/2=\sigma+\Delta/2\ge\sigma$, $\log(\sigma/\tau_k)=-\log(1+\Delta/\sigma)\ge-\Delta/\sigma$,
+and $\log\frac{\sinh(\sigma/2)}{\sinh(\tau_k/2)}\ge\log\frac{\sigma}{\tau_k}-\frac{\tau_k^2}{24}$; hence
+$\theta\ge\sigma-\Delta/\sigma-\tau_k^2/24$. Also $\theta<\tau_k$ because $\sinh$ is increasing. Insert
+Lemmas~\ref{lem:tau}--\ref{lem:Delta} and $k\sigma\ge k\tau_k-k\Delta_k$; see Appendix~\ref{app:cert}.
+\end{proof}
+
+\begin{lemma}[Positivity]\label{lem:positivity}
+If $(r-1)\theta<\log\alpha$, then $c_s>0$ for $|s|\le r-1$, and every factor $1-\alpha\qq^{j}$ with
+$-(r-1)\le j\le r-2$ is negative.
+\end{lemma}
+
+\begin{proof}
+$\alpha\qq^{j}\ge\alpha e^{-(r-1)\theta}>1$ for $j\ge-(r-1)$. For $s>0$ numerator and denominator of $c_s$ both have sign
+$(-1)^s$; for $s=-m<0$, $c_s=(1-\alpha)^{-m}\prod_{j=1}^m(1-\alpha\qq^{-j})$ has $2m$ negative factors.
+\end{proof}
+
+\begin{remark}
+The condition $1<\qq<\alpha$ alone does \emph{not} suffice for positivity at negative indices; the hypothesis
+$(r-1)\theta<\log\alpha$ is what is needed, and it holds in the wedge of the Main Theorem with enormous room
+(Appendix~\ref{app:cert}).
+\end{remark}
+
+\subsection{Analytic continuation and Taylor coefficients}
+Put $z_0=1/\alpha\in(0.41,0.69)$ and $Q=\qq^{-1}=e^{-\theta}$. Writing $1-\alpha\qq^j=-\alpha\qq^j(1-z_0Q^j)$ gives
+$c_s=(1-z_0)^sQ^{s(s-1)/2}/(z_0;Q)_s$ for integers $s$ (for $s<0$ by the cocycle relation
+$(a;q)_{m+n}=(a;q)_m(aq^m;q)_n$, valid for all integers $m,n$). With $(z_0;Q)_s=(z_0;Q)_\infty/(z_0Q^s;Q)_\infty$
+and $\log(x;Q)_\infty=-\sum_{m\ge1}x^m/(m(1-Q^m))$ we obtain, for $|s|<\theta^{-1}\log(1/z_0)$,
+\begin{equation}\label{eq:logc}
+\ell(s):=s\log(1-z_0)-\frac\theta2 s(s-1)+\sum_{m\ge1}\frac{z_0^m\big(1-e^{-m\theta s}\big)}{m\,(1-e^{-m\theta})},
+\end{equation}
+a holomorphic function, real on the real axis, with $e^{\ell(s)}=c_s$ at integers $s$ in its domain.
+
+\begin{lemma}\label{lem:refcoef}
+For $n\ge3$, $|[s^n]\,\ell(s)|\le\kappa^n/n+\kappa^{n-1}/(n(n-1))$ with $\kappa=\theta/(1-z_0)$. For $k\ge12000$
+this gives $|[s^n]\ell(s)|\le(9/k)^{n-1}$.
+\end{lemma}
+
+\begin{proof}
+For $n\ge3$ only the series contributes, and $[s^n](1-e^{-m\theta s})=-(-m\theta)^n/n!$, so
+\[
+|[s^n]\ell|\le\frac{\theta^n}{n!}\sum_{m\ge1}\frac{m^{n-1}z_0^m}{1-e^{-m\theta}}
+\le\frac{\theta^n}{n!}\Big(\sum_m m^{n-1}z_0^m+\frac1\theta\sum_m m^{n-2}z_0^m\Big),
+\]
+using $1/(1-e^{-x})\le1+1/x$. Since $\sum_{m\ge1}m^pz^m=zA_p(z)/(1-z)^{p+1}$ with the Eulerian polynomial
+$A_p$ (nonnegative coefficients, $A_p(1)=p!$), $\sum_m m^pz^m\le p!/(1-z)^{p+1}$ for $0<z<1$, $p\ge0$. This gives the
+first bound. By Lemma~\ref{lem:params}, $k\kappa=k\theta\,\alpha/(\alpha-1)<2.002\cdot1.45/0.45<6.46<8.4$, and
+$8.4^n/(nk)+8.4^{n-1}/(n(n-1))<9^{n-1}$ for $n\ge3$, $k\ge12000$.
+\end{proof}
+
+\section{The reversed Hankel block and its \texorpdfstring{$q$}{q}-Pascal factorization}
+
+Set $d=r-1$ and
+\[
+M_{ij}=c_{d-i-j},\qquad 0\le i,j\le d,\qquad Q=\qq^{-1},\qquad B=\alpha\qq^{d-1}.
+\]
+
+\begin{lemma}[Congruence]\label{lem:congruence}
+$M=c_d\,A\,U\,A$ with $A=\diag(A_i)$, $A_i=(B;Q)_i/(1-\alpha)^i$, and
+\[
+U_{ij}=\frac{(B;Q)_{i+j}}{(B;Q)_i\,(B;Q)_j}.
+\]
+Under the hypothesis of Lemma~\ref{lem:positivity}, $c_d>0$ and $A_i>0$.
+\end{lemma}
+
+\begin{proof}
+By the integer cocycle, $(\alpha;\qq)_d=(\alpha;\qq)_{d-n}(\alpha\qq^{d-n};\qq)_n$ for every $0\le n\le 2d$, including
+$d-n<0$, and $(\alpha\qq^{d-n};\qq)_n=\prod_{l=0}^{n-1}(1-\alpha\qq^{d-1-l})=(B;Q)_n$. Hence
+$c_{d-n}=c_d\,(B;Q)_n/(1-\alpha)^n$, which is the claim with $n=i+j$. Signs follow from Lemma~\ref{lem:positivity}:
+$1-BQ^l=1-\alpha\qq^{d-1-l}<0$ for $0\le l\le d-1$, so $(B;Q)_i$ and $(1-\alpha)^i$ both have sign $(-1)^i$.
+\end{proof}
+
+\begin{proposition}[$q$-Pascal $LDL^T$]\label{prop:LDL}
+For indeterminates $B,Q$ and all $i,j\ge0$,
+\[
+U_{ij}=\sum_{m=0}^{\min(i,j)}\qbin im{Q}\qbin jm{Q}D_m,\qquad
+D_m=B^mQ^{m(m-1)}\frac{(Q;Q)_m}{(B;Q)_m}.
+\]
+Thus $U=LDL^T$ with $L_{ij}=\qbin ij{Q}$ and $D=\diag(D_m)$. In our situation $0<Q<1$ and $BQ^{m-1}=\alpha\qq^{d-m}>1$
+for $1\le m\le d$, so $\sgn D_m=(-1)^m$.
+\end{proposition}
+
+\begin{proof}
+From $(Q;Q)_i/(Q;Q)_{i-m}=(-1)^mQ^{im-\binom m2}(Q^{-i};Q)_m$ we get
+\[
+\qbin im{Q}\qbin jm{Q}D_m=\frac{(Q^{-i};Q)_m(Q^{-j};Q)_m}{(Q;Q)_m(B;Q)_m}\,(BQ^{i+j})^m .
+\]
+Hence the sum equals ${}_2\phi_1(Q^{-i},Q^{-j};B;Q,BQ^{i+j})$, which by the $q$-Chu--Vandermonde summation
+${}_2\phi_1(q^{-n},b;c;q,cq^n/b)=(c/b;q)_n/(c;q)_n$ \cite[\S1.5 and Appendix~II]{GR}, with $n=i$, $b=Q^{-j}$, $c=B$, equals
+$(BQ^j;Q)_i/(B;Q)_i=U_{ij}$. The sign of $D_m$: $(Q;Q)_m>0$ and every factor $1-BQ^l$, $0\le l\le m-1$, of $(B;Q)_m$ is negative.
+\end{proof}
+
+Consequently
+\begin{equation}\label{eq:SJS}
+M=SJS^T,\qquad S=\sqrt{c_d}\;A\,L\,|D|^{1/2},\qquad J=\diag\big((-1)^m\big)_{m=0}^d .
+\end{equation}
+
+\section{Dilation response of the whitened reference}\label{sec:gateB}
+
+For a function $\phi$ defined at the integers $|s|\le d$ write $M\circ\phi:=[c_{d-i-j}\phi(d-i-j)]_{i,j}$ and define the
+\emph{response}
+\[
+\cR(\phi)=\big\|S^{-1}(M\circ\phi)S^{-T}\big\| .
+\]
+Since $M\circ\phi=c_dA(U\circ\phi)A$ and diagonal matrices commute with the Hadamard product structure,
+$\cR(\phi)=\||D|^{-1/2}L^{-1}(U\circ\phi)L^{-T}|D|^{-1/2}\|$; in particular $A$ and $c_d$ play no role.
+
+\begin{lemma}\label{lem:R1}
+Let $\Lambda_\beta=\diag(Q^{\beta i})_{i=0}^d$ and $R_\beta=L^{-1}\Lambda_\beta L$. Then $R_1$ is lower bidiagonal with
+\[
+(R_1)_{mm}=Q^m,\qquad (R_1)_{m,m-1}=-Q^{m-1}(1-Q^m).
+\]
+\end{lemma}
+
+\begin{proof}
+We need $\Lambda_1L=LR_1$, i.e.\ $Q^i\qbin ij{Q}=Q^j\qbin ij{Q}-Q^j(1-Q^{j+1})\qbin i{j+1}{Q}$. This follows from the
+$q$-Pascal relation $(1-Q^{j+1})\qbin i{j+1}{Q}=(1-Q^{i-j})\qbin ij{Q}$.
+\end{proof}
+
+\begin{lemma}[Whitened sub-diagonal]\label{lem:subdiag}
+Let $\widehat R_\beta=|D|^{-1/2}R_\beta|D|^{1/2}$. Then $(\widehat R_1)_{mm}=Q^m$ and
+\[
+\big|(\widehat R_1)_{m,m-1}\big|=\sqrt{(1-Q^m)\big(Q^{m-1}-B^{-1}\big)}\le\sqrt{1-Q^m}\le\sqrt{m\theta}.
+\]
+\end{lemma}
+
+\begin{proof}
+By Proposition~\ref{prop:LDL},
+\[
+\frac{D_m}{D_{m-1}}=-\frac{BQ^{2m-2}(1-Q^m)}{BQ^{m-1}-1},\qquad
+(\widehat R_1)_{m,m-1}=(R_1)_{m,m-1}\,\frac{|D_{m-1}|^{1/2}}{|D_m|^{1/2}}.
+\]
+Squaring and simplifying gives the identity; then use
+$0<Q^{m-1}-B^{-1}<1$ and $1-e^{-m\theta}\le m\theta$.
+\end{proof}
+
+\begin{remark}
+For the $q$-Vandermonde reference of \cite{Mich} the corresponding quantity is $\sqrt{1-Q^m}$; the new reference
+multiplies it by $\sqrt{Q^{m-1}-B^{-1}}\approx\sqrt{1-1/\alpha}<1$. Nothing else in the dilation argument depends on the
+pivots.
+\end{remark}
+
+\begin{lemma}[Generator]\label{lem:generator}
+Let $x=r\theta\le1/64$. Then $N:=\widehat R_1-I$ satisfies $\|N\|\le x+\sqrt x\le 9/64$, the principal logarithm
+$G=\log\widehat R_1=\sum_{j\ge1}(-1)^{j+1}N^j/j$ satisfies $\|G\|\le\frac{72}{55}\sqrt x$, $\widehat R_\beta=e^{\beta G}$
+for all real $\beta$, and
+\[
+\theta d+2\|G\|\le4\sqrt{r\theta}=:t .
+\]
+\end{lemma}
+
+\begin{proof}
+The diagonal part of $N$ has entries $|Q^m-1|\le m\theta\le x$ and its sub-diagonal part has entries $\le\sqrt x$
+(Lemma~\ref{lem:subdiag}); a diagonal and a weighted shift have norms equal to their largest entries, so
+$\|N\|\le x+\sqrt x$. Then $\|G\|\le-\log(1-\|N\|)\le\|N\|/(1-\|N\|)\le\frac{64}{55}\cdot\frac98\sqrt x$.
+Next, $R_\beta=\exp(\beta L^{-1}\Lambda' L)$ with $\Lambda'=\diag(i\log Q)$, so $\widehat R_\beta=e^{\beta\widehat G}$ with
+$\widehat G=|D|^{-1/2}L^{-1}\Lambda'L|D|^{1/2}$. Both $\widehat G$ and $G$ equal $P(\widehat R_1)$, where $P$ is the
+Lagrange polynomial with $P(Q^i)=i\log Q$ (the eigenvalues $Q^i$ of $\widehat R_1$ are distinct and $\widehat R_1$ is
+diagonalizable); hence $G=\widehat G$. Finally $\theta d+2\|G\|\le x+\frac{144}{55}\sqrt x\le(\frac18+\frac{144}{55})\sqrt x<4\sqrt x$.
+\end{proof}
+
+\begin{proposition}[All-degree response]\label{prop:response}
+If $r\theta\le1/64$, then $\cR\big((\theta s)^n\big)\le t^n$ for every integer $n\ge0$, with $t=4\sqrt{r\theta}$.
+\end{proposition}
+
+\begin{proof}
+For $s=d-i-j$ we have $e^{\beta\theta s}=e^{\beta\theta d}Q^{\beta i}Q^{\beta j}$, so
+$M\circ e^{\beta\theta s}=e^{\beta\theta d}\Lambda_\beta M\Lambda_\beta$. Since $A$ commutes with $\Lambda_\beta$,
+$S^{-1}\Lambda_\beta S=|D|^{-1/2}L^{-1}\Lambda_\beta L|D|^{1/2}=\widehat R_\beta=e^{\beta G}$, and therefore
+\[
+F(\beta):=S^{-1}\big(M\circ e^{\beta\theta s}\big)S^{-T}=e^{\beta\theta d}\,e^{\beta G}\,J\,e^{\beta G^T}.
+\]
+Entrywise, $F^{(n)}(0)=S^{-1}(M\circ(\theta s)^n)S^{-T}$. Expanding the three exponentials,
+$F^{(n)}(0)=\sum_{a+b+c=n}\frac{n!}{a!\,b!\,c!}(\theta d)^aG^bJ(G^T)^c$, whose norm is at most $(\theta d+2\|G\|)^n\le t^n$.
+\end{proof}
+
+\begin{definition}[Weighted algebra]
+For $w\ge1$ let $\cA_w$ be the space of power series $\phi(s)=\sum_{n\ge0}\phi_ns^n$ with
+$\|\phi\|_{\cA}=\sum_n|\phi_n|w^n<\infty$. It is a commutative Banach algebra, and
+$\|e^\phi-1\|_{\cA}\le e^{\|\phi\|_\cA}-1$.
+\end{definition}
+
+\begin{corollary}\label{cor:calculus}
+Let $r\theta\le1/64$ and $w=t/\theta=4\sqrt{r/\theta}$. Then $w\ge32r>d$, and for every $\phi\in\cA_w$,
+$\cR(\phi)\le\|\phi\|_{\cA}$.
+\end{corollary}
+
+\begin{proof}
+$w/r=4/\sqrt{r\theta}\ge32$. The series $\phi(s)=\sum\phi_ns^n$ converges absolutely at every integer $|s|\le d$, so
+$M\circ\phi=\sum_n\phi_n\,M\circ s^n$ entrywise, and $\cR(s^n)=\theta^{-n}\cR((\theta s)^n)\le w^n$.
+\end{proof}
+
+\section{The four-zero remainder}\label{sec:remainder}
+
+Let $k\ge10^9$ and $r\theta\le1/64$. By Input~A, $\log b_s=f(k+s)-f(k)-s\,(f(k+1)-f(k))$ at integers $|s|\le d$, and the
+right-hand side is holomorphic for $|s|<0.05k$. Define
+\[
+h(s)=f(k+s)-f(k)-s\,(f(k+1)-f(k))-\ell(s),\qquad \beta_n=[s^n]h(s).
+\]
+Then $b_s=c_s\,e^{h(s)}$ at the integers $|s|\le d$, and, by Lemma~\ref{lem:match},
+\[
+h(-1)=h(0)=h(1)=h(2)=0 .
+\]
+
+\begin{lemma}\label{lem:beta}
+For $n\ge3$, $|\beta_n|\le3\cdot40^nk^{1-n}+(9/k)^{n-1}\le4\cdot40^nk^{1-n}$.
+\end{lemma}
+
+\begin{proof}
+For $n\ge2$, $\beta_n=f^{(n)}(k)/n!-[s^n]\ell$; use \eqref{eq:gateA}, Lemma~\ref{lem:refcoef} and $9^{n-1}\le40^n$.
+\end{proof}
+
+Let $\cI_3$ denote Lagrange interpolation at the nodes $-1,0,1,2$, with basis
+\[
+\ell_{-1}(s)=-\tfrac{s^3}6+\tfrac{s^2}2-\tfrac s3,\quad \ell_0(s)=\tfrac{(s+1)(s-1)(s-2)}{2},\quad
+\ell_1(s)=-\tfrac{s^3}2+\tfrac{s^2}2+s,\quad \ell_2(s)=\tfrac{s^3}6-\tfrac s6,
+\]
+and put $P_n(s)=s^n-\cI_3[s^n]$; note $P_n=0$ for $n\le3$.
+
+\begin{lemma}\label{lem:interp}
+If $w\ge1$ and $n\ge4$, then $\|\cI_3[s^n]\|_\cA\le2^nw^3$ and $\|P_n\|_\cA\le w^n+2^nw^3$.
+\end{lemma}
+
+\begin{proof}
+For $n\ge1$, $\cI_3[s^n]=(-1)^n\ell_{-1}+\ell_1+2^n\ell_2$. For $w\ge1$, $\|\ell_{-1}\|_\cA\le w^3$,
+$\|\ell_1\|_\cA\le2w^3$, $\|\ell_2\|_\cA\le w^3/3$, and $3+2^n/3\le2^n$ for $n\ge3$.
+\end{proof}
+
+\begin{proposition}\label{prop:majorant}
+Assume $k\ge10^9$, $r\theta\le1/64$, $w=4\sqrt{r/\theta}$ and $y:=40w/k<1$. Then
+\[
+h=\sum_{n\ge4}\beta_nP_n\quad\text{in }\cA_w,\qquad
+\|h\|_\cA\le 4k\,\frac{y^4}{1-y}+4k\,w^3\,\frac{(80/k)^4}{1-80/k}.
+\]
+\end{proposition}
+
+\begin{proof}
+By Lemmas~\ref{lem:beta} and~\ref{lem:interp}, the series $\sum_{n\ge4}\beta_nP_n$ converges absolutely
+in $\cA_w$, and $\sum_n\beta_n\cI_3[s^n]$ converges to a cubic polynomial. Hence
+\[
+p:=h-\sum_{n\ge4}\beta_nP_n=\sum_{n\le3}\beta_ns^n+\sum_{n\ge4}\beta_n\cI_3[s^n]
+\]
+is a cubic polynomial; it vanishes at the
+four nodes because $h$ and every $P_n$ do, so $p\equiv0$. The bound follows by summing
+$4\cdot40^nk^{1-n}(w^n+2^nw^3)$ over $n\ge4$.
+\end{proof}
+
+The first term is the quartic main term: since $w^2=16r/\theta$ and $k\theta\asymp1$, it is $\asymp k^{-3}w^4\asymp r^2/k$.
+For the three-point reference the analogous main term is $\asymp k^{-2}w^3\asymp(r^3/k)^{1/2}$, which is the source of the
+cubic wedge \eqref{eq:cubic}.
+
+\section{Proof of the Main Theorem}\label{sec:proof}
+
+\begin{lemma}[Inertia]\label{lem:inertia}
+Let $S$ be invertible, $J$ a signature matrix, and $T=S(J+F)S^T$ with $F$ symmetric and $\|F\|<1$. Then $T$ and $J$ have
+the same inertia.
+\end{lemma}
+
+\begin{proof}
+For $\lambda\in[0,1]$, $\sigma_{\min}(J+\lambda F)\ge1-\lambda\|F\|>0$, so the eigenvalues of the symmetric family
+$J+\lambda F$ never cross $0$; hence $J+F$ has the inertia of $J$, and Sylvester's law of inertia transfers it to $T$.
+\end{proof}
+
+\begin{proof}[Proof of the Main Theorem]
+Let $r\ge2$ and $k\ge10^{11}r^2$; then $k\ge4\cdot10^{11}$, so Inputs~A and~B and all lemmas above apply.
+By Lemma~\ref{lem:params}, $r\theta<2.002\,r/k\le2.002/(10^{11}r)$, which is $\le1/64$ and $<\log1.45<\log\alpha$;
+so Lemma~\ref{lem:positivity}, \eqref{eq:SJS}, Corollary~\ref{cor:calculus} and Proposition~\ref{prop:majorant} hold.
+Since $k\theta>0.53$, $w^2=16r/\theta<16rk/0.53$ and
+\[
+y^2=\frac{1600\,w^2}{k^2}<\frac{25600}{0.53}\cdot\frac rk\le\frac{25600}{0.53\cdot2\cdot10^{11}}<2.5\cdot10^{-7}.
+\]
+Hence $4ky^4/(1-y)<4\,(25600/0.53)^2\,10^{-11}/(1-y)<0.09337$, and the second term in
+Proposition~\ref{prop:majorant} equals $4\cdot80^4(y/40)^3/(1-80/k)<3.1\cdot10^{-7}$. Therefore
+$\|h\|_\cA<0.0934$ and $\|e^h-1\|_\cA<e^{0.0934}-1<0.098$ (Appendix~\ref{app:cert}).
+
+Let $H'=[b_{d-i-j}]_{i,j=0}^d$. Since $b_s=c_se^{h(s)}$ at the integers $|s|\le d$, $H'-M=M\circ(e^h-1)$, and
+Corollary~\ref{cor:calculus} gives
+$\|S^{-1}(H'-M)S^{-T}\|\le\|e^h-1\|_\cA<1$. By \eqref{eq:SJS} and Lemma~\ref{lem:inertia}, $H'$ has the inertia of $J$;
+$J$ has $\lfloor r/2\rfloor$ negative entries, so $\sgn\det H'=(-1)^{\lfloor r/2\rfloor}$.
+
+Finally, $a_{k+d-i-j}=a_k\rho^d\,\rho^{-i}\rho^{-j}\,b_{d-i-j}$ (all indices are $\ge k-d>0$), so
+$H=[a_{k+d-i-j}]$ is a positive diagonal congruence of a positive multiple of $H'$, and $\sgn\det H=(-1)^{\lfloor r/2\rfloor}$.
+Reversing the order of the columns of $[a_{k+j-i}]$ gives $H$, at the cost of the sign of the reversal permutation,
+$(-1)^{\lfloor r/2\rfloor}$. Hence $D_{r,k}=(-1)^{\lfloor r/2\rfloor}\det H>0$.
+\end{proof}
+
+\begin{remark}[The constant]\label{rem:constant}
+The main term is at most $4(25600/0.53)^2/C$ when $k\ge Cr^2$, so the argument closes as soon as this is $<\log2$, i.e.
+for every $C>1.35\cdot10^{10}$. Using the cruder windows $k\theta>0.4$, $\alpha>4/3$ one gets $C>2.37\cdot10^{10}$. No effort
+has been made to optimize Input~A, which is the dominant loss (the true coefficients satisfy
+$|f^{(n)}(k)/n!|\,k^{n-1}<0.3$, cf.\ Table~\ref{tab:taylor}, versus $3\cdot40^n$).
+\end{remark}
+
+\section{Numerical illustration}\label{sec:numerics}
+
+Nothing in this section is used in the proof. We use the certified values of $\lambda_n$, $n\le12016$, published
+with \cite{LM} (relative width $<3\cdot10^{-91}$), which we cross-checked against our own quadrature of \eqref{eq:Xi}.
+At $k=12000$ one finds $k\tau_k=1.74995$, $k^2|\tau_k-\cT(k)|=1.017$ (compare $20$ in Input~B), $k^2\Delta_k=1.7225$,
+$\alpha=1.7777$, $k\theta=0.7655$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrcccc}
+\toprule
+$k$ & $r$ & three-point & four-point & ratio & four-point$\cdot k/r^2$\\
+\midrule
+11990 & 3 & $4.86\cdot10^{-3}$ & $1.77\cdot10^{-5}$ & 275 & 0.024\\
+11990 & 6 & $4.00\cdot10^{-2}$ & $2.17\cdot10^{-4}$ & 184 & 0.072\\
+11990 & 8 & $7.93\cdot10^{-2}$ & $5.02\cdot10^{-4}$ & 158 & 0.094\\
+11990 & 12 & $1.88\cdot10^{-1}$ & $1.49\cdot10^{-3}$ & 127 & 0.124\\
+11990 & 16 & $3.31\cdot10^{-1}$ & $3.06\cdot10^{-3}$ & 108 & 0.144\\
+\midrule
+3000 & 8 & $1.61\cdot10^{-1}$ & $1.93\cdot10^{-3}$ & 83 & 0.091\\
+6000 & 8 & $1.13\cdot10^{-1}$ & $9.86\cdot10^{-4}$ & 114 & 0.092\\
+\bottomrule
+\end{tabular}
+\caption{Actual whitened perturbation $\|S^{-1}(H'-M)S^{-T}\|$ on the true $\xi$-coefficients, for the three-point
+reference of \cite{Mich} and the four-point reference of this paper. At fixed $r$ the four-point error decays like $k^{-1}$
+and the three-point error like $k^{-1/2}$.}
+\label{tab:whitened}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcccc}
+\toprule
+$n$ & $|f^{(n)}(k)/n!|\,k^{n-1}$ & $|[s^n]\ell|\,k^{n-1}$ & $|\beta_n|\,k^{n-1}$ & bound $4\cdot40^n$\\
+\midrule
+3 & 0.287 & 0.287 & $9.0\cdot10^{-6}$ & $2.6\cdot10^{5}$\\
+4 & 0.142 & 0.196 & 0.054 & $1.0\cdot10^{7}$\\
+5 & 0.085 & 0.157 & 0.072 & $4.1\cdot10^{8}$\\
+6 & 0.056 & 0.139 & 0.083 & $1.6\cdot10^{10}$\\
+8 & 0.030 & 0.132 & 0.102 & $2.6\cdot10^{13}$\\
+\bottomrule
+\end{tabular}
+\caption{Taylor coefficients at $k=12000$, computed by Cauchy integrals of $\log I(z)-\log\Gamma(2z+1)$ and of \eqref{eq:logc}.
+The predicted size of the dominant term $\beta_4\cR(P_4)$ at $(k,r)=(11990,8)$ is $5.0\cdot10^{-4}$, in agreement with
+Table~\ref{tab:whitened}.}
+\label{tab:taylor}
+\end{table}
+
+\begin{remark}[Outlook]
+Heuristically, a reference with $m$ exact matching points and an exact $LDL^T$ with $q$-Pascal factor would give a main
+term $\asymp k^{1-m}w^m\asymp r^{m/2}k^{1-m/2}$, i.e.\ a wedge $k\gtrsim r^{m/(m-2)}$. Whether such references exist for
+$m\ge5$ (for instance among ${}_r\phi_s$-type sequences) is open; in any case this route cannot reach the critical regime
+$k=O(r)$, where $w$ becomes comparable to the radius of analyticity.
+\end{remark}
+
+\appendix
+\section{Certified scalar inequalities and reproducibility}\label{app:cert}
+
+All scalar inequalities in Sections~\ref{sec:windows}--\ref{sec:proof} are verified by the ancillary script
+\texttt{certificate.py} using Arb ball arithmetic \cite{Arb} at 256 bits. Each window has the form $c(k)/k$ or
+$c(k)/k^2$ with $c$ monotone in the favourable direction, so evaluation at $k=12000$ suffices. The certified values are:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+quantity & certified enclosure & used\\
+\midrule
+$k\tau_k$ & $[1.712619,\ 2.001667]$ & $(1.71,\,2.002)$\\
+$k^2\Delta_k$ & $[1.675686,\ 2.003334]$ & $(1.675,\,2.004)$\\
+$\alpha$ & $[1.458989,\ 2.392839]$ & $(1.45,\,2.40)$\\
+$k\theta$ & $[0.537774,\ 2.002]$ & $(0.53,\,2.002)$\\
+$k\kappa$ & $\le 6.451$ & $<8.4$\\
+$y$ (wedge) & $\le4.915\cdot10^{-4}$ & \\
+$\|h\|_\cA$ (wedge) & $\le0.0933691$ & $<0.0934$\\
+$\|e^h-1\|_\cA$ & $<0.098$ & $<1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Further ancillary scripts (not needed for the proof) check:
+\texttt{sym\_check.py} --- symbolic verification (generic parameters) of Lemma~\ref{lem:match}, the integer cocycle,
+Lemma~\ref{lem:congruence}, Proposition~\ref{prop:LDL} for $i,j<7$, Lemmas~\ref{lem:R1}--\ref{lem:subdiag} and
+Lemma~\ref{lem:interp};
+\texttt{gateB\_numeric.py}, \texttt{response\_scaling.py} --- the response bound of Proposition~\ref{prop:response},
+computed from a numerical $LDL^T$ of $M$ at 260 digits;
+\texttt{xi\_data.py}, \texttt{whitened\_experiment.py}, \texttt{taylor\_check.py} --- Section~\ref{sec:numerics}.
+
+\subsection*{Acknowledgments}
+The author thanks W.~Michałowski and Y.~Liu and J.~Mao for making their preprints and certified data publicly available.
+
+\subsection*{Use of AI tools}
+The following AI models were used in the preparation of this work: Astra (GPT, OpenAI) and Claude (Anthropic).
+
+\begin{thebibliography}{99}
+
+\bibitem{ASW}
+M.~Aissen, I.~J.~Schoenberg, A.~M.~Whitney,
+\emph{On the generating functions of totally positive sequences I},
+J.~Analyse Math.\ \textbf{2} (1952), 93--103.
+
+\bibitem{CNV}
+G.~Csordas, T.~S.~Norfolk, R.~S.~Varga,
+\emph{The Riemann hypothesis and the Tur\'an inequalities},
+Trans.\ Amer.\ Math.\ Soc.\ \textbf{296} (1986), 521--541, doi:10.2307/2000378.
+
+\bibitem{Edrei}
+A.~Edrei,
+\emph{On the generating functions of totally positive sequences II},
+J.~Analyse Math.\ \textbf{2} (1952), doi:10.1007/BF02786971.
+
+\bibitem{GR}
+G.~Gasper, M.~Rahman,
+\emph{Basic Hypergeometric Series}, 2nd ed.,
+Cambridge University Press, 2004.
+
+\bibitem{GORZ}
+M.~Griffin, K.~Ono, L.~Rolen, D.~Zagier,
+\emph{Jensen polynomials for the Riemann zeta function and other sequences},
+Proc.\ Natl.\ Acad.\ Sci.\ USA \textbf{116} (2019), no.~23, 11103--11110.
+
+\bibitem{Holland}
+J.~Holland,
+\emph{A new hyperbolicity wedge and a joint semicircle limit for Jensen polynomials of Riemann's $\xi$-function},
+arXiv:2608.08682 (2026).
+
+\bibitem{Arb}
+F.~Johansson,
+\emph{Arb: efficient arbitrary-precision midpoint-radius interval arithmetic},
+IEEE Trans.\ Comput.\ \textbf{66} (2017), no.~8, 1281--1292.
+
+\bibitem{Katkova}
+O.~M.~Katkova,
+\emph{Multiple positivity and the Riemann zeta-function},
+Comput.\ Methods Funct.\ Theory \textbf{7} (2007), no.~1, 13--31; arXiv:math/0505174.
+
+\bibitem{LM}
+Y.~Liu, J.~Mao,
+\emph{Infinite log-concavity of the Taylor coefficients of the Riemann xi-function},
+arXiv:2610.04972 (2026).
+
+\bibitem{Mich}
+W.~Michałowski,
+\emph{An explicit uniform cubic wedge for consecutive Toeplitz minors of the Riemann xi coefficients},
+arXiv:2607.16795 (2026).
+
+\end{thebibliography}
+
+\end{document}

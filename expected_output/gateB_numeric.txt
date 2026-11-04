@@ -1,0 +1,12 @@
+alpha=1.517 theta=1.64e-04 r= 3  t_true=2.1466e-02  t_claim=4sqrt(r theta)=8.8597e-02
+alpha=1.677 theta=5.09e-04 r=10  t_true=9.4511e-02  t_claim=4sqrt(r theta)=2.8527e-01
+alpha=1.963 theta=7.39e-04 r= 5  t_true=8.0150e-02  t_claim=4sqrt(r theta)=2.4312e-01
+alpha=1.911 theta=2.15e-04 r= 3  t_true=2.9106e-02  t_claim=4sqrt(r theta)=1.0163e-01
+alpha=2.258 theta=1.06e-03 r= 5  t_true=1.0341e-01  t_claim=4sqrt(r theta)=2.9182e-01
+alpha=2.120 theta=1.81e-03 r= 8  t_true=1.8846e-01  t_claim=4sqrt(r theta)=4.8089e-01
+alpha=1.352 theta=1.47e-04 r= 5  t_true=2.5416e-02  t_claim=4sqrt(r theta)=1.0831e-01
+alpha=2.619 theta=2.42e-04 r=12  t_true=8.6059e-02  t_claim=4sqrt(r theta)=2.1555e-01
+alpha=1.633 theta=6.12e-04 r=10  t_true=1.0297e-01  t_claim=4sqrt(r theta)=3.1300e-01
+alpha=2.070 theta=8.24e-04 r= 5  t_true=8.7061e-02  t_claim=4sqrt(r theta)=2.5678e-01
+max over tests of R(s^n)/(t_true/theta)^n = 1.0  (must be <= 1)
+Gate B response bound R(s^n) <= w^n verified numerically (n=0..8).

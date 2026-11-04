@@ -1,0 +1,24 @@
+Section 3: curvature windows (uniform in k >= 12000)
+  [ok] W(2k/pi) > 6
+  [ok] k tau_k >= 12/7 - 20/k > 1.71          (value [1.7126190 +/- 4.77e-8])
+  [ok] k tau_k <= 2 + 20/k < 2.002            (value [2.0016667 +/- 3.34e-8])
+  [ok] k^2 Delta_k >= (576/343)(k/(k+1))^2 - 40/(k-2) > 1.675 (value [1.6756866 +/- 4.59e-8])
+  [ok] k^2 Delta_k <= 2 + 40/(k-2) < 2.004   (value [2.0033339 +/- 1.11e-8])
+Section 4: reference parameters
+  [ok] alpha > 1.45   (value [1.4589892 +/- 3.66e-8])
+  [ok] alpha < 2.40   (value [2.3928382 +/- 1.46e-8])
+  [ok] k theta > 0.53 (value [0.53777480 +/- 4.05e-9])
+  [ok] k theta < k tau < 2.002
+  [ok] k kappa = k theta alpha/(alpha-1) < 8.4 (value [6.45089 +/- 1.12e-6])
+  [ok] |[s^d] log c_s| <= (9/k)^(d-1) and |beta_d| <= 4 40^d k^(1-d), d = 3..399 (larger d: trivial)
+Sections 6-8: wedge k >= 1e11 r^2, r >= 2
+  [ok] x = r theta <= 2.002/(2C) <= 1/64
+  [ok] (r-1) theta < log alpha  (no poles, signs)
+     y <= [0.000491436 +/- 9.35e-11]
+     main term 4k y^4/(1-y)           <= [0.093368775 +/- 4.95e-10]
+     interpolation term               <= [3.03837e-7 +/- 3.20e-13]
+     ||h||_A                          <= [0.093369079 +/- 3.33e-10]
+  [ok] ||h||_A < 0.0934
+  [ok] ||e^h - 1||_A <= e^{0.0934} - 1 < 0.098 < 1
+     (the same chain closes for every C > [1.34636e+10 +/- 4.72e+4])
+ALL CHECKS PASSED

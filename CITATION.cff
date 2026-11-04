@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this verifier, please cite the accompanying paper."
+title: "A uniform quadratic wedge for consecutive Toeplitz minors of the Riemann xi-coefficients — verifier"
+authors:
+  - family-names: Doria
+    given-names: Alessio
+    affiliation: Independent Researcher
+    email: numero2405@gmail.com
+license: MIT
+date-released: 2026-11-04
