@@ -62,6 +62,8 @@
 {\normalsize\href{mailto:numero2405@gmail.com}{\texttt{numero2405@gmail.com}}\par}
 \vspace{0.6em}
 {\normalsize November 2026\par}
+\vspace{0.3em}
+{\normalsize DOI: \href{https://doi.org/10.5281/zenodo.23946749}{10.5281/zenodo.23946749}\par}
 \end{center}
 \vspace{1.2em}
 
@@ -113,15 +115,25 @@ is equivalent to all zeros of $G$ being real and negative, and by the Aissen--Sc
 Toeplitz matrix $[a_{j-i}]_{i,j\ge0}$ is nonnegative. The consecutive minors $D_{r,k}$ form a natural
 two-parameter subfamily; under RH they are all nonnegative.
 
-Unconditional information on $D_{r,k}$ is of two kinds. For each fixed $r$, $D_{r,k}>0$ for $k\ge N(r)$ with
-a non-explicit $N(r)$ (Katkova \cite{Katkova}); for $r=2$ this is the Turán inequality \cite{CNV}. Liu and Mao
-\cite{LM} recently proved that $(a_k)$ (equivalently the sequence $\lambda_n=\xi^{(2n)}(\tfrac12)/(2n)!$) is
-infinitely log-concave. Uniformly in $r$, Michałowski \cite{Mich} proved the explicit cubic wedge
+Unconditional information on $D_{r,k}$ is of several kinds. For orders two and three positivity is known for every $k$:
+$D_{2,k}>0$ is the Turán inequality of Csordas, Norfolk and Varga \cite{CNV}, and $D_{3,k}>0$ is due to Nuttall
+\cite{Nuttall} (see \cite{WY}). For each fixed $r$, Katkova \cite{Katkova} proved that $D_{r,k}>0$ for $k\ge N(r)$ with a
+non-explicit $N(r)$. Wang and Yang report an order-uniform sufficient range of exponential size, $k>c\,e^{r(r-1)}$, for the
+same determinants \cite[Introduction]{WY}. More recently Michałowski \cite{Mich} obtained the first explicit polynomial
+uniform wedge,
 \begin{equation}\label{eq:cubic}
 D_{r,k}>0\qquad(r\ge2,\ k\ge10^{18}r^3).
 \end{equation}
-Related but different in nature are the hyperbolicity results for Jensen polynomials of $\xi$
-\cite{GORZ,Holland}, which concern a different two-parameter family of determinantal conditions.
+
+Several related results concern different hierarchies of the Laguerre--Pólya program. Wang and Yang \cite{WY} prove
+Laguerre inequalities of order $r$ for $k>cr^3$ and complete-monotonicity estimates for the $\Xi$-coefficients;
+Griffin--Ono--Rolen--Zagier \cite{GORZ} and Holland \cite{Holland} establish hyperbolicity regions for Jensen
+polynomials of $\xi$; and Liu and Mao \cite{LM} prove that $(a_k)$ (equivalently $\lambda_n=\xi^{(2n)}(\tfrac12)/(2n)!$)
+is strictly infinitely log-concave. Sra \cite{Sra} proves log-concavity and Pólya frequency properties of large
+finite order for the densities whose Laplace transforms are $1/\xi(\tfrac12+s)$ and $1/\Xi$, which are different objects
+from the coefficient sequence $(a_k)$. These conditions do not imply positivity of the order-$r$ consecutive Toeplitz minors
+considered here. To the best of our knowledge, the result below is the first polynomial uniform wedge for these minors
+with exponent strictly below three.
 
 \subsection{Result}
 \begin{mainthm}
@@ -142,7 +154,7 @@ $k^{-2}$. Here we use the $q$-Pochhammer sequence
 \[
 c_s=\frac{(1-\alpha)^s}{(\alpha;\qq)_s},
 \]
-whose two parameters are chosen so that $c$ matches the normalized coefficients at $s=-1,0,1,2$. Two facts make
+whose two parameters are chosen so that $c$ matches the normalized coefficients at $s=-1,0,1,2$. $LDL^T$ factorizations of $q$-Pascal type are classical; what is new here is their use for a four-point reference adapted to the $\xi$-coefficients. Two facts make
 this work:
 \begin{enumerate}
 \item the reversed Hankel block of $c$ is diagonally congruent to the matrix
@@ -714,6 +726,21 @@ arXiv:2610.04972 (2026).
 W.~Michałowski,
 \emph{An explicit uniform cubic wedge for consecutive Toeplitz minors of the Riemann xi coefficients},
 arXiv:2607.16795 (2026).
+
+\bibitem{Nuttall}
+J.~Nuttall,
+\emph{Wronskians, cumulants, and the Riemann hypothesis},
+Constr.\ Approx.\ \textbf{38} (2013), 193--212, doi:10.1007/s00365-013-9200-8.
+
+\bibitem{Sra}
+S.~Sra,
+\emph{On some positivity properties of the Riemann $\Xi$ function},
+arXiv:2611.02944 (2026).
+
+\bibitem{WY}
+L.~X.~W.~Wang, N.~N.~Y.~Yang,
+\emph{Laguerre inequalities and complete monotonicity for the Riemann Xi-function and the partition function},
+Trans.\ Amer.\ Math.\ Soc.\ (2024).
 
 \end{thebibliography}
 
